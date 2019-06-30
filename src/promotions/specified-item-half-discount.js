@@ -11,6 +11,9 @@ class SpecifiedItemHalfDiscount extends PromotionStrategy {
   }
 
   discountPrice() {
+    if (this.discountItems.length <= 0) {
+      return 0;
+    }
     return this.discountItems
       .map((item) => (item.price * item.count) / 2)
       .reduce((sum, price) => sum + price);
