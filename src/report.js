@@ -1,14 +1,11 @@
-let promotions = require("./promotions.js");
+let ChoosePromotions = require("./promotions/choose-promotions.js");
 
 class Report {
   constructor(order) {
-    this.order = order;
+    this.itemDetails = order.itemDetails;
+    this.promotion = new ChoosePromotions(order).getBestPromotion();
+    this.totalPrice = order.calTotalPrice() - this.promotion.discountPrice;
   }
-
-  //   static getPromotedItemsObj() {
-  //       let promotionsType = promotions.loadPromotions();
-  //       this.order.itemDetails.map(item=> item.id)
-  //   }
 }
 
 module.exports = Report;
