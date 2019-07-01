@@ -18,17 +18,17 @@ describe("Take out food", function() {
     let report = new Report(order);
     let result = tools.printReport(report);
 
-    let expected =
-      "============= 订餐明细 =============\n" +
-      "黄焖鸡 x 1 = 18元\n" +
-      "肉夹馍 x 2 = 12元\n" +
-      "凉皮 x 1 = 8元\n" +
-      "-----------------------------------\n" +
-      "使用优惠:\n" +
-      "指定菜品半价(黄焖鸡，凉皮)，省13元\n" +
-      "-----------------------------------\n" +
-      "总计：25元\n" +
-      "===================================";
+    let expected = `
+      ============= 订餐明细 =============
+      黄焖鸡 x 1 = 18元
+      肉夹馍 x 2 = 12元
+      凉皮 x 1 = 8元
+      -----------------------------------
+      使用优惠:
+      指定菜品半价(黄焖鸡，凉皮)，省13元
+      -----------------------------------
+      总计：25元
+      ===================================`.trim();
     expect(result).toEqual(expected);
   });
 
@@ -40,13 +40,15 @@ describe("Take out food", function() {
     ];
 
     let result = tools.printOrderDetails(orderDetails);
-
-    let expected =
-      "黄焖鸡 x 1 = 18元\n" + "肉夹馍 x 2 = 12元\n" + "凉皮 x 1 = 8元\n";
+    let expected = `
+      黄焖鸡 x 1 = 18元
+      肉夹馍 x 2 = 12元
+      凉皮 x 1 = 8元
+  `.trim();
     expect(result).toEqual(expected);
   });
 
-  it("test print promotion", () => {
+  it("test print promotion that specified item half discount", () => {
     let promotion = {
       type: "指定菜品半价",
       itemNames: ["黄焖鸡", "凉皮"],
@@ -55,7 +57,38 @@ describe("Take out food", function() {
 
     let result = tools.printPromotion(promotion);
 
-    let expected = "使用优惠:\n" + "指定菜品半价(黄焖鸡，凉皮)，省13元\n";
+    let expected = `
+      使用优惠:
+      指定菜品半价(黄焖鸡，凉皮)，省13元
+    `.trim();
+    expect(result).toEqual(expected);
+  });
+
+  it("test print promotion that over thirty discount six", () => {
+    let promotion = {
+      type: "满30减6元",
+      discountPrice: 6,
+      itemNames: []
+    };
+
+    let result = tools.printPromotion(promotion);
+    let expected = `
+      使用优惠:
+      满30减6元，省6元
+    `.trim();
+    expect(result).toEqual(expected);
+  });
+
+  it("test print promotion that not any discount", () => {
+    let promotion = {
+      type: "",
+      discountPrice: 0,
+      itemNames: []
+    };
+
+    let result = tools.printPromotion(promotion);
+
+    let expected = "";
     expect(result).toEqual(expected);
   });
 });

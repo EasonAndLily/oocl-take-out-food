@@ -9,44 +9,65 @@ function covertInputsToItemsMap(inputs) {
 }
 
 function printReport(report) {
+  let itemDetailsStr = this.printOrderDetails(report.itemDetails);
+  let printPromiton = this.printPromotion(report.promotion);
+  let promotionStr =
+    printPromiton +
+    `
+      ` +
+    "-----------------------------------";
+  let totalPriceStr = report.totalPrice;
   return (
-    "============= 订餐明细 =============\n" +
-    this.printOrderDetails(report.itemDetails) +
-    "-----------------------------------\n" +
-    this.printPromotion(report.promotion) +
-    "-----------------------------------\n" +
-    "总计：" +
-    report.totalPrice +
-    "元\n" +
-    "==================================="
-  );
+    `
+      ============= 订餐明细 =============
+      ${itemDetailsStr}
+      -----------------------------------` +
+    (printPromiton == ""
+      ? ""
+      : `
+      ${promotionStr}`) +
+    `
+      总计：${totalPriceStr}元
+      ===================================`
+  ).trim();
 }
 
 function printOrderDetails(orderDetails) {
-  let result = "";
+  let result = ``;
   orderDetails.forEach((item) => {
-    result =
-      result +
+    result +=
       item.name +
       " x " +
       item.count +
       " = " +
       item.count * item.price +
-      "元\n";
+      "元" +
+      `
+      `;
   });
-  return result;
+  return result.trim();
 }
 
 function printPromotion(promotion) {
+  if (promotion.discountPrice == 0) {
+    return "";
+  }
+  let promotionsItems =
+    promotion.itemNames.length > 0
+      ? "(" + promotion.itemNames.join("，") + ")"
+      : "";
   return (
-    "使用优惠:\n" +
+    "使用优惠:" +
+    `
+      ` +
     promotion.type +
-    "(" +
-    promotion.itemNames.join("，") +
-    ")，省" +
+    promotionsItems +
+    "，省" +
     promotion.discountPrice +
-    "元\n"
-  );
+    "元" +
+    `
+    `
+  ).trim();
 }
 
 module.exports = {
